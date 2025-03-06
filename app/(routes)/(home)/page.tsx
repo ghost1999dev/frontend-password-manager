@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function Home() {
-
   const showMessage =()=>{
     toast.success("Operacion exitosa")
   }
