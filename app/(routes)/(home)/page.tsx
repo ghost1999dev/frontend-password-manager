@@ -1,6 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import HeaderMain from './components/HeaderMain/HeaderMain';
 
 export default function Home() {
   const showMessage =()=>{
@@ -8,7 +9,7 @@ export default function Home() {
   }
   return (
     <div>
-      <Button onClick={showMessage }>Show message</Button>
+      <HeaderMain/>
     </div>
   );
 }
