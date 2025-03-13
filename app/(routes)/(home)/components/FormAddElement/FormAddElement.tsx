@@ -19,6 +19,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Copy, CopyCheck, Earth, Eye, Shuffle } from "lucide-react";
 import { copyClipboard } from "@/lib/copyClipboard";
 import { useState } from "react";
+import { generatedPassword } from "@/lib/generatedPassword";
+import { Textarea } from "@/components/ui/textarea";
 export function FormAddElement() {
   const [showPassword,setShowPassword]=useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,9 +39,14 @@ export function FormAddElement() {
     },
   })
   const onSubmit= (values: z.infer<typeof formSchema>)=>{
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    console.log("Message from onsubitm");
+    
     console.log(values)
+  }
+
+  const generatePassword=()=>{
+    const password = generatedPassword()
+    form.setValue("password", password)
   }
 
   const updateUrl=()=>{
@@ -113,7 +120,7 @@ export function FormAddElement() {
         />   
         <FormField
           control={form.control}
-          name="typeElement"
+          name="directory"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Directory</FormLabel>
@@ -187,6 +194,7 @@ export function FormAddElement() {
 
                 Password
                 <Shuffle
+                  onClick={generatePassword}
                   className="cursor-pointer"
                   size={15}
                 />
@@ -216,7 +224,21 @@ export function FormAddElement() {
               <FormMessage/>
             </FormItem>
           )}
+        />
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea {...field}/>
+              </FormControl>
+              <FormMessage/>
+            </FormItem>
+          )}
         />  
+        <Button type="submit">Submit</Button>
            
       </form>
     </Form>
