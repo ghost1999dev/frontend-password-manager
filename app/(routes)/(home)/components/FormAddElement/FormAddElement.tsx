@@ -16,7 +16,11 @@ import { Input } from "@/components/ui/input"
 import { formSchema } from "./FormAddElement.form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Copy, CopyCheck, Earth, Eye, Shuffle } from "lucide-react";
+import { copyClipboard } from "@/lib/copyClipboard";
+import { useState } from "react";
 export function FormAddElement() {
+  const [showPassword,setShowPassword]=useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,6 +41,10 @@ export function FormAddElement() {
     // ✅ This will be type-safe and validated.
     console.log(values)
   }
+
+  const updateUrl=()=>{
+    form.setValue("urlWebsite",window.location.href)
+  }
   return (
     <Form {...form}>
       <form 
@@ -54,7 +62,7 @@ export function FormAddElement() {
               defaultValue={field.value}
               >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="w-[355-px]">
                   <SelectValue placeholder="Select a directory for your password"/>
                 </SelectTrigger>
               </FormControl>
@@ -108,14 +116,14 @@ export function FormAddElement() {
           name="typeElement"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What type do you want ?</FormLabel>
+              <FormLabel>Directory</FormLabel>
               <Select
               onValueChange={field.onChange}
               defaultValue={field.value}
               >
               <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a directory for your password"/>
+                <SelectTrigger className="w-[355-px]">
+                  <SelectValue placeholder="Choose the directory"/>
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -127,7 +135,89 @@ export function FormAddElement() {
               
             </FormItem>
           )}
-        />       
+        />   
+         <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>User</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input {...field}/>
+                  <Copy
+                    className="absolute top-3 right-4 cursor-pointer"
+                    size={18}
+                    onClick={()=>{
+                      copyClipboard(field.value)
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage/>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="urlWebsite"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>URL Website</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input {...field}/>
+                  <Earth
+                    className="absolute top-3 right-2 cursor-pointer"
+                    size={18}
+                    onClick={updateUrl}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage/>
+            </FormItem>
+          )}
+        />  
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex justify-between">
+
+                Password
+                <Shuffle
+                  className="cursor-pointer"
+                  size={15}
+                />
+              </FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                  type={showPassword ? "text":"password"}
+                  {...field}/>
+                  <Eye
+                    
+                    className="absolute top-3 right-10"
+                    size={15}
+                    onClick={()=>{
+                      setShowPassword(!showPassword)
+                    }}
+                  />
+                  <Copy
+                    className="absolute top-3 right-3 cursor-pointer"
+                    size={15}
+                    onClick={()=>{
+                      copyClipboard(field.value)
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage/>
+            </FormItem>
+          )}
+        />  
+           
       </form>
     </Form>
   )
