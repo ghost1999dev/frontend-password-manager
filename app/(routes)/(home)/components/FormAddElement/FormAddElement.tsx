@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
+
 import {
   Form,
   FormControl,
@@ -21,6 +22,8 @@ import { copyClipboard } from "@/lib/copyClipboard";
 import { useState } from "react";
 import { generatedPassword } from "@/lib/generatedPassword";
 import { Textarea } from "@/components/ui/textarea";
+import axios, { Axios } from "axios";
+import { toast } from "sonner";
 export function FormAddElement() {
   const [showPassword,setShowPassword]=useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,10 +41,13 @@ export function FormAddElement() {
       
     },
   })
-  const onSubmit= (values: z.infer<typeof formSchema>)=>{
-    console.log("Message from onsubitm");
-    
-    console.log(values)
+  const onSubmit= async(values: z.infer<typeof formSchema>)=>{
+    try {
+      await axios.post("/api/items",values)
+      toast.success("Item created")
+    } catch (error) {
+      toast.error("Something went wrong")
+    }
   }
 
   const generatePassword=()=>{
