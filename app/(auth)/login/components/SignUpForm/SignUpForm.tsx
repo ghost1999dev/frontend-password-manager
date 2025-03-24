@@ -15,13 +15,16 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import Email from "next-auth/providers/email"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 const formSchema = z.object({
   email: z.string().min(2).max(50),
   username: z.string().min(2).max(50),
   password: z.string().min(2).max(50)
 })
 export const SignUpForm = () => {
-      // 1. Define your form.
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,10 +35,23 @@ export const SignUpForm = () => {
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  const onSubmit = async(values: z.infer<typeof formSchema>) =>{
+    const response = await fetch("/api/auth/register",{
+      method: "POST",
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+        username: values.username
+      })
+    })
+
+    if(response.status === 200){
+      toast.success('Registered succesfully')
+      router.push("/")
+      
+    }else{
+      toast.error("An unexpected error ocurred. Please try again")
+    }
   }
   return (
     <Form {...form}>
