@@ -24,8 +24,11 @@ import { generatedPassword } from "@/lib/generatedPassword";
 import { Textarea } from "@/components/ui/textarea";
 import axios, { Axios } from "axios";
 import { toast } from "sonner";
-export function FormAddElement() {
+import { FormAddElementProps } from "./FormAddElement.types";
+
+export function FormAddElement(props:FormAddElementProps) {
   const [showPassword,setShowPassword]=useState(false)
+  const{userId} = props
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,8 +40,7 @@ export function FormAddElement() {
       password:"",
       urlWebsite:"",
       notes:"",
-      userId:"Prueba"
-      
+      userId:userId
     },
   })
   const onSubmit= async(values: z.infer<typeof formSchema>)=>{

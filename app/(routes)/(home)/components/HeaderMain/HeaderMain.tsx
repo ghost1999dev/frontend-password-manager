@@ -13,11 +13,13 @@ import { Button } from '@/components/ui/button'
 import { ChevronDown } from 'lucide-react'
 import { dataHeaderMain } from './HeaderMain.data'
 import { FormAddElement } from '../FormAddElement'
+import { HeaderMainProps } from './HeaderMain.types';
 
-export default function HeaderMain() {
+export default function HeaderMain(props:HeaderMainProps) {
     const [typeElement, setTypeElement] = useState<"password" | "folder" | "">()
     const [openDialog, setopenDialog] = useState(false)
-    const [openDropDown, setopenDropDown] = useState(false)    
+    const [openDropDown, setopenDropDown] = useState(false) 
+    const{userId}=props   
   return (
     <div className='flex justify-between items-center'>
       <h1 className='text-xl md:text-3xl font-semibold'>Dashboard Generator</h1>
@@ -56,7 +58,7 @@ export default function HeaderMain() {
             <DialogHeader>
                 <DialogTitle>Nuevo elemento</DialogTitle>
             </DialogHeader>
-            {typeElement === "password" && <FormAddElement/>}
+            {typeElement === "password" && <FormAddElement userId={userId}/>}
         </DialogContent>
       </Dialog>
     </div>
