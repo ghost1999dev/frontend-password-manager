@@ -5,9 +5,12 @@ import HeaderMain from './components/HeaderMain/HeaderMain';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { TableData } from "./components/TableData/TableData";
 
 export default  async function Home() {
   const session = await getServerSession()
+  console.log("Thi is information from session " + JSON.stringify(session?.user?.email));
+  
   if(!session || !session.user?.email){
     return redirect("/")
   }
@@ -23,13 +26,15 @@ export default  async function Home() {
       }
     }
   })  
-
-  if(!user){
+  console.log("This are elements from " + JSON.stringify(user));
+  
+  if(!user || !user.elements){
     return redirect("/")
   }
   return (
     <div>
       <HeaderMain userId={user?.id}/>
+      <TableData elements={user.elements}/>
     </div>
   );
 }
