@@ -6,9 +6,7 @@ export type TableDataProps ={
     elements: Element[]
 }
 export function TableData (props: TableDataProps) {
-    const {elements} = props
-    console.log("Result from " + elements);
-    
+    const {elements} = props 
   return (
     <div className='py-10'>
         <DataTable columns={columns} data={elements}/>

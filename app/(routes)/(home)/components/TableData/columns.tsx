@@ -33,10 +33,12 @@ export const columns: ColumnDef<ColumnProps>[] = [
     cell: ({ row }) => {
       const password = row.original.password;
       const username = row.original.username;
-      console.log(username);
+      const idPassword = row.original.id
+      console.log('Username from ' + idPassword);
+      
 
       const onEditElement = () => {
-        console.log("Editing element");
+        window.location.href=`/element/${row.original.id}`
       };
       const copyItemClipBoard = (item: string, name: string) => {
         navigator.clipboard.writeText(item);
@@ -67,7 +69,10 @@ export const columns: ColumnDef<ColumnProps>[] = [
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                     onClick={onEditElement
+                     }
+                    >Edit</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
           </Dialog>

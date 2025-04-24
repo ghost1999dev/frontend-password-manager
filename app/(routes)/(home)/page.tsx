@@ -9,8 +9,6 @@ import { TableData } from "./components/TableData/TableData";
 
 export default  async function Home() {
   const session = await getServerSession()
-  console.log("Thi is information from session " + JSON.stringify(session?.user?.email));
-  
   if(!session || !session.user?.email){
     return redirect("/")
   }
@@ -25,9 +23,7 @@ export default  async function Home() {
         }
       }
     }
-  })  
-  console.log("This are elements from " + JSON.stringify(user));
-  
+  })    
   if(!user || !user.elements){
     return redirect("/")
   }
