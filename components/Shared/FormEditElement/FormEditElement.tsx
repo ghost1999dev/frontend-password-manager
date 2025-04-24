@@ -1,11 +1,10 @@
-
 'use client'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -20,7 +19,7 @@ import { formSchema } from "./FormEditElement.form";
 import axios from "axios";
 import { toast } from "sonner";
 import { generatedPassword } from "@/lib/generatedPassword";
-import { Select, SelectTrigger, SelectValue } from "@radix-ui/react-select";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectContent, SelectItem } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -29,31 +28,35 @@ import { Textarea } from "@/components/ui/textarea";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+import { copyClipboard } from "@/lib/copyClipboard";
+
 export function FormEditElement(props:FormEditElementProps) { 
-  const session = getServerSession()
-  if (!session) {
+  const {session}=props 
+  if(!session || !session.user?.email){
     return redirect("/")
-  }  
+  }
   const [showPassword, setShowPassword] = useState(false) 
   const {dataElement}=props
+  const router = useRouter()
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-        typeElement:"",
-        isFavourite:false,
-        name:"",
-        directory:"",
-        username:"",
-        password:"",
-        urlWebsite:"",
-        notes:"",
-        userId:""
+        typeElement:dataElement.typeElement,
+        isFavourite:dataElement.isFavourite ?? "",
+        name:dataElement.name ?? "",
+        directory:dataElement.directory ?? "",
+        username:dataElement.username ?? "",
+        password:dataElement.password ?? "",
+        urlWebsite:dataElement.urlWebsite ?? "",
+        notes:dataElement.notes ?? "",
+        userId:dataElement.userId ?? ""
       },
     })
     const onSubmit= async(values: z.infer<typeof formSchema>)=>{
         try {
-          await axios.post("/api/items",values)
-          toast.success("Item created")
+          await axios.patch(`/api/items/${dataElement.id}`,values)
+          toast.success("Item edited")
+          router.push("/")
         } catch (error) {
           toast.error("Something went wrong")
         }
@@ -106,7 +109,6 @@ export function FormEditElement(props:FormEditElementProps) {
                   <div className="flex flex-row items-start space-x-3 space-y-0 p-4">
                   <FormControl>
                     <Checkbox
-                    
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
@@ -170,7 +172,7 @@ export function FormEditElement(props:FormEditElementProps) {
                         className="absolute top-3 right-4 cursor-pointer"
                         size={18}
                         onClick={()=>{
-                          //copyClipboard(field.value)
+                          copyClipboard(field.value)
                         }}
                       />
                     </div>
@@ -205,7 +207,6 @@ export function FormEditElement(props:FormEditElementProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex justify-between">
-    
                     Password
                     <Shuffle
                       onClick={generatePassword}
@@ -218,8 +219,7 @@ export function FormEditElement(props:FormEditElementProps) {
                       <Input
                       type={showPassword ? "text":"password"}
                       {...field}/>
-                      <Eye
-                        
+                      <Eye                       
                         className="absolute top-3 right-10"
                         size={15}
                         onClick={()=>{
@@ -230,7 +230,7 @@ export function FormEditElement(props:FormEditElementProps) {
                         className="absolute top-3 right-3 cursor-pointer"
                         size={15}
                         onClick={()=>{
-                          //copyClipboard(field.value)
+                          copyClipboard(field.value)
                         }}
                       />
                     </div>
@@ -251,9 +251,8 @@ export function FormEditElement(props:FormEditElementProps) {
                   <FormMessage/>
                 </FormItem>
               )}
-            />  
-            <Button type="submit">Submit</Button>
-               
+            />
+            <Button type="submit">Submit</Button>  
           </form>
         </Form>
   )

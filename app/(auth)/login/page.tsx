@@ -2,8 +2,13 @@ import React from 'react'
 import { ImageAuth } from './components/image'
 import { TabsForm } from './components/tabsForm'
 import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 export default async function page(){
   const session = await getServerSession()  
+
+  if(session?.user?.email){
+    return redirect("/")
+  }
   return (
     <div className='grid md:grid-cols-2 h-screen overflow-hidden items-center'>
       <div className='flex justify-center h-full'>

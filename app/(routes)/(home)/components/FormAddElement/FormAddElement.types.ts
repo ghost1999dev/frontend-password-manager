@@ -1,3 +1,4 @@
 export type FormAddElementProps={
-    userId:string
+    userId:string,
+    closeDialogAddDropdown:()=>void
 }

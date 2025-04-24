@@ -19,7 +19,11 @@ export default function HeaderMain(props:HeaderMainProps) {
     const [typeElement, setTypeElement] = useState<"password" | "folder" | "">()
     const [openDialog, setopenDialog] = useState(false)
     const [openDropDown, setopenDropDown] = useState(false) 
-    const{userId}=props   
+    const{userId}=props 
+    const closeDialogAddDropdown = ()=>{
+        setopenDialog(false)
+        setopenDropDown(false)
+    }  
   return (
     <div className='flex justify-between items-center'>
       <h1 className='text-xl md:text-3xl font-semibold'>Dashboard Generator</h1>
@@ -58,7 +62,7 @@ export default function HeaderMain(props:HeaderMainProps) {
             <DialogHeader>
                 <DialogTitle>Nuevo elemento</DialogTitle>
             </DialogHeader>
-            {typeElement === "password" && <FormAddElement userId={userId}/>}
+            {typeElement === "password" && <FormAddElement userId={userId} closeDialogAddDropdown={closeDialogAddDropdown} />}
         </DialogContent>
       </Dialog>
     </div>

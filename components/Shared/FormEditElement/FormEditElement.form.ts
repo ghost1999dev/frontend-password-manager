@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const formSchema = z.object({
     typeElement: z.string().min(2).max(50),
-    isFavourite: z.boolean().default(false),
+    isFavourite: z.boolean(),
     name:z.string().min(2).max(50),
     directory:z.string().min(2).max(50),
     username:z.string().min(2).max(50),

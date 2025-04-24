@@ -25,10 +25,12 @@ import { Textarea } from "@/components/ui/textarea";
 import axios, { Axios } from "axios";
 import { toast } from "sonner";
 import { FormAddElementProps } from "./FormAddElement.types";
+import { useRouter } from "next/navigation";
 
 export function FormAddElement(props:FormAddElementProps) {
   const [showPassword,setShowPassword]=useState(false)
-  const{userId} = props
+  const{userId,closeDialogAddDropdown} = props
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,6 +49,18 @@ export function FormAddElement(props:FormAddElementProps) {
     try {
       await axios.post("/api/items",values)
       toast.success("Item created")
+      form.reset({
+        typeElement:"",
+        isFavourite:false,
+        name:"",
+        directory:"",
+        username:"",
+        password:"",
+        urlWebsite:"",
+        notes:""
+      })
+      closeDialogAddDropdown()
+      router.refresh()
     } catch (error) {
       toast.error("Something went wrong")
     }

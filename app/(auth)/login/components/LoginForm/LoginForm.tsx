@@ -1,5 +1,4 @@
 "use client";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,8 +32,7 @@ export const LoginForm = () => {
   });
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await signIn("credentials", {
-      email: values.username,
-      
+      email: values.username,    
       password: values.password,
       redirect: false,
     });

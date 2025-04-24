@@ -4,15 +4,15 @@ import Email from 'next-auth/providers/email';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
 import { FormEditElement } from '@/components/Shared/FormEditElement';
-type Props={
-  params:{
-    elementId:string
+export default async function ElementPage({params}:{params:{elementId:string}}) {
+  const {elementId}= await Promise.resolve(params)
+  const session = await getServerSession()
+  if(!session || !session.user?.email){
+    return redirect("/")
   }
-}
-export default async function Page({params}:Props) {
   const element = await db.element.findUnique({
     where:{
-      id:params.elementId
+      id:elementId
     }
   })
   if (!element) {
@@ -20,7 +20,7 @@ export default async function Page({params}:Props) {
   }
   return (
     <div>
-      <FormEditElement dataElement={element}/>
+      <FormEditElement dataElement={element} session={session}/>
     </div>
   )
 }
