@@ -21,12 +21,12 @@ import {
             },
             {
                 item:"Logins",
-                href: "/logins-elements",
+                href: "/logins",
                 icon: Earth,
             },
             {
                 item:"Credit Card",
-                href: "/credit-card",
+                href: "/credit",
                 icon:CreditCard,
             }
         ]
