@@ -56,7 +56,7 @@ export function SidebarRoutes() {
       ))}
 
       <SingleItem
-        href="#"
+        href="/generator"
         label='Generator'
         icon={RectangleEllipsis}
       />
