@@ -8,7 +8,6 @@ export default async function ProfilePage() {
   if(!session || !session.user?.email){
     return redirect("/")
   }
-
   const user = await db.user.findUnique({
     where:{
       email:session.user.email
@@ -17,6 +16,18 @@ export default async function ProfilePage() {
   if(!user){
     return redirect("/")
   }
+  /**
+   * profile image
+   * email
+   * name
+   * username
+   */
+  return (
+    <div>
+      <h1 className='text-xl'>Account Details</h1>
+      <FormEditProfile user={user}/>
+    </div>
+  )
   
 
 }
